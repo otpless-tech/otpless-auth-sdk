@@ -1,4 +1,4 @@
-module otpless/auth-sdk
+module github.com/otpless-tech/otpless-auth-sdk
 
 go 1.20
 
