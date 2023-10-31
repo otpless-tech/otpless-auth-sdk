@@ -6,12 +6,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"io/ioutil"
 	"math/big"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 func (u UserDetail) DecodeIDToken(idToken, clientID, clientSecret, audience string) (*UserDetailResult, error) {
