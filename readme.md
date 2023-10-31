@@ -70,11 +70,38 @@ VerifyCode(code, clientID, clientSecret)
 
 #### Method Params:
 
-| Params       | Data type | Mandatory | Constraints | Remarks                                                                      |
-| ------------ | --------- | --------- | ----------- | ---------------------------------------------------------------------------- |
-| idToken      | String    | true      |             | idToken which is JWT token which you get from `OTPLess` by exchange code API |
-| clientId     | String    | true      |             | Your OTPLess `Client Id`                                                     |
-| clientSecret | String    | true      |             | Your OTPLess `Client Secret`                                                 |
+| Params       | Data type | Mandatory | Constraints | Remarks                           |
+| ------------ | --------- | --------- | ----------- | --------------------------------- |
+| code         | String    | true      |             | code which you get from `OTPLess` |
+| clientId     | String    | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String    | true      |             | Your OTPLess `Client Secret`      |
+
+#### Return
+
+Return:
+Object Name: UserDetailResult
+
+> ### 3. VerifyAuthToken
+
+---
+
+This method help to resolve `token` which is issued by `OTPLess` which return user detail
+from that token also this method verify that token is valid, token should not expired and
+issued by only `otpless.com`
+
+##### Method Signature:
+
+```go
+VerifyAuthToken(token, clientID, clientSecret string)
+```
+
+#### Method Params:
+
+| Params       | Data type | Mandatory | Constraints | Remarks                            |
+| ------------ | --------- | --------- | ----------- | ---------------------------------- |
+| token        | String    | true      |             | token which you get from `OTPLess` |
+| clientId     | String    | true      |             | Your OTPLess `Client Id`           |
+| clientSecret | String    | true      |             | Your OTPLess `Client Secret`       |
 
 #### Return
 

@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -48,6 +49,8 @@ func (u UserDetail) DecodeIDToken(idToken, clientID, clientSecret, audience stri
 	userDetail.PhoneNumber = decoded["phone_number"].(string)
 	userDetail.Email = decoded["email"].(string)
 	userDetail.Name = decoded["name"].(string)
+	userDetail.CountryCode = decoded["country_code"].(string)
+	userDetail.NationalPhoneNumber = decoded["national_phone_number"].(string)
 
 	return &userDetail, nil
 }
@@ -83,6 +86,50 @@ func (u UserDetail) VerifyCode(code, clientID, clientSecret string) (*UserDetail
 	}
 
 	return nil, errors.New(fmt.Sprintf("Request failed with status code %d", response.StatusCode))
+}
+func (u UserDetail) VerifyAuthToken(token, clientID, clientSecret string) (*UserDetailResult, error) {
+
+	formData := url.Values{}
+	formData.Set("token", token)
+	formData.Set("client_id", clientID)
+	formData.Set("client_secret", clientSecret)
+
+	client := &http.Client{
+		Timeout: HTTP_TIMEOUT, // Make sure you've defined this constant in your package
+	}
+
+	req, err := http.NewRequest("POST", OIDC_AUTH_TOKEN_API, strings.NewReader(formData.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	var decoded map[string]interface{}
+	json.Unmarshal(body, &decoded)
+
+	authTime, err := strconv.ParseInt(decoded["auth_time"].(string), 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing auth_time: %v", err)
+	}
+	// Map the response to UserDetailResult
+	userDetail := UserDetailResult{
+		Success:             true,
+		AuthTime:            authTime,
+		PhoneNumber:         decoded["phone_number"].(string),
+		Email:               decoded["email"].(string),
+		Name:                decoded["name"].(string),
+		CountryCode:         decoded["country_code"].(string),
+		NationalPhoneNumber: decoded["national_phone_number"].(string),
+	}
+	return &userDetail, nil
 }
 
 func decodeJWT(jwtToken, modulus, exponent, issuer, audience string) (jwt.MapClaims, error) {
