@@ -44,26 +44,11 @@ func (u UserDetail) DecodeIDToken(idToken, clientID, clientSecret, audience stri
 	}
 	var userDetail UserDetailResult
 	userDetail.Success = true
-	userDetail.Iss = decoded["iss"].(string)
-	userDetail.Sub = decoded["sub"].(string)
-	userDetail.Aud = decoded["aud"].(string)
-	userDetail.Exp = int64(decoded["exp"].(float64)) * 1000
-	userDetail.Iat = int64(decoded["iat"].(float64)) * 1000
 	userDetail.AuthTime = authTime
 	userDetail.PhoneNumber = decoded["phone_number"].(string)
 	userDetail.Email = decoded["email"].(string)
 	userDetail.Name = decoded["name"].(string)
 
-	if authDetails, ok := decoded["authentication_details"].(map[string]interface{}); ok {
-		jsonData, err := json.Marshal(authDetails)
-		if err != nil {
-			return nil, err
-		}
-		err = json.Unmarshal(jsonData, &userDetail.AuthenticationDetail)
-		if err != nil {
-			return nil, err
-		}
-	}
 	return &userDetail, nil
 }
 
