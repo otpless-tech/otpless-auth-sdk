@@ -124,6 +124,37 @@ userDetail := UserDetailResult{
 >
 > `success` (boolean): This will be `true` in case of method successfully performed operation.<br> > `authTime` (Long, required): The time when authentication was completed.<br> > `phoneNumber` (String, required): The user's phone number.<br> > `countryCode` (String, required): The country code of user's phone number.<br> > `nationalPhoneNumber` (String, required): The user's phone number without country code.<br> > `email` (String, required): The user's email address.<br> > `name` (String, required): The user's full name.<br>
 
+> ### 4. Generate Magic link
+
+---
+
+The Authorization Endpoint initiates the authentication process by sending a `magic link` to the user's WhatsApp or email, based on the provided contact information. This link is used to verify the identity of the user. Upon the user's action on this link, they are redirected to the specified URI with an authorization code included in the redirection.
+
+##### Method Signature:
+
+```Go
+GenerateMagicLink(mobileNumber, email, clientID, clientSecret, redirectUri string) (*MagicLinkResponse, error)
+```
+
+#### Method Params:
+
+| Params        | Data type | Mandatory | Constraints           | Remarks                                                                                               |
+| ------------- | --------- | --------- | --------------------- | ----------------------------------------------------------------------------------------------------- |
+| mobile_number | String    | false     | At least one required | The user's mobile number for authentication in the format: country code + number (e.g., 91XXXXXXXXXX) |
+| email         | String    | false     | At least one required | The user's email address for authentication.                                                          |
+| redirect_uri  | String    | true      |                       | The URL to which the user will be redirected after authentication. This should be URL-encoded         |
+| clientId      | String    | true      |                       | Your OTPLess `Client Id`                                                                              |
+| clientSecret  | String    | true      |                       | Your OTPLess `Client Secret`                                                                          |
+
+#### Return
+
+Return:
+Object Name: RquestIds
+
+```json
+&{RequestIds:[{Type:MOBILE Value:c36b678aef104691b15f93910acfee48} {Type:EMAIL Value:39250d56e8da4f4cb86224929bf76a2d}]}
+```
+
 ### Error case:
 
 `success` (boolean): This will be `false`. The method is failed to perform.<br>

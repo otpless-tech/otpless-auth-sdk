@@ -131,7 +131,45 @@ func (u UserDetail) VerifyAuthToken(token, clientID, clientSecret string) (*User
 	}
 	return &userDetail, nil
 }
+func GenerateMagicLink(mobileNumber, email, clientID, clientSecret, redirectUri string) (*MagicLinkResponse, error) {
+	params := url.Values{}
+	params.Add("client_id", clientID)
+	params.Add("client_secret", clientSecret)
+	params.Add("redirect_uri", redirectUri)
 
+	if mobileNumber != "" {
+		params.Add("mobile_number", mobileNumber)
+	}
+
+	if email != "" {
+		params.Add("email", email)
+	}
+
+	fullURL := fmt.Sprintf("%s?%s", MAGIC_LINK_URL, params.Encode())
+
+	response, err := http.Get(fullURL)
+	if err != nil {
+		return nil, fmt.Errorf("error making the request: %v", err)
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d", response.StatusCode)
+	}
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	var resp MagicLinkResponse
+	err = json.Unmarshal(body, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshaling response: %v", err)
+	}
+
+	return &resp, nil
+}
 func decodeJWT(jwtToken, modulus, exponent, issuer, audience string) (jwt.MapClaims, error) {
 	publicKey, err := createRSAPublicKey(modulus, exponent)
 	if err != nil {

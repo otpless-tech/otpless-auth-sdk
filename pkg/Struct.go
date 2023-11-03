@@ -11,3 +11,10 @@ type UserDetailResult struct {
 }
 
 type UserDetail struct{}
+
+type MagicLinkResponse struct {
+	RequestIds []struct {
+		Type  string `json:"type"`
+		Value string `json:"value"`
+	} `json:"requestIds"`
+}
