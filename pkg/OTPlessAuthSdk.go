@@ -131,7 +131,7 @@ func (u UserDetail) VerifyAuthToken(token, clientID, clientSecret string) (*User
 	}
 	return &userDetail, nil
 }
-func GenerateMagicLink(mobileNumber, email, clientID, clientSecret, redirectUri string) (*MagicLinkResponse, error) {
+func GenerateMagicLink(mobileNumber, email, clientID, clientSecret, redirectUri, channel string) (*MagicLinkResponse, error) {
 	params := url.Values{}
 	params.Add("client_id", clientID)
 	params.Add("client_secret", clientSecret)
@@ -143,6 +143,10 @@ func GenerateMagicLink(mobileNumber, email, clientID, clientSecret, redirectUri 
 
 	if email != "" {
 		params.Add("email", email)
+	}
+
+	if channel != "" {
+		params.Add("channel", channel)
 	}
 
 	fullURL := fmt.Sprintf("%s?%s", MAGIC_LINK_URL, params.Encode())
