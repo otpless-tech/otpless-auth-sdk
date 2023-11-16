@@ -133,7 +133,7 @@ The Authorization Endpoint initiates the authentication process by sending a `ma
 ##### Method Signature:
 
 ```Go
-GenerateMagicLink(mobileNumber, email, clientID, clientSecret, redirectUri string) (*MagicLinkResponse, error)
+GenerateMagicLink(mobileNumber, email, clientID, clientSecret, redirectUri, channel string) (*MagicLinkResponse, error)
 ```
 
 #### Method Params:
