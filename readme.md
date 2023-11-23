@@ -164,6 +164,28 @@ Object Name: RquestIds
 ### Example of usage
 
 ```go
+package main
+
+import (
+	"fmt"
+
+	otplessAuthSdk "github.com/otpless-tech/otpless-auth-sdk"
+)
+
+func main() {
+	clientID := "your_client_id"
+	clientSecret := "your_client_secret"
+	code := "some_code"
+
+	result, err := otplessAuthSdk.VerifyCode(clientID, clientSecret, code)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	fmt.Println("Result:", result)
+}
 
 ```
 
