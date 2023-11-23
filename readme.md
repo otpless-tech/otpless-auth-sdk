@@ -164,23 +164,6 @@ Object Name: RquestIds
 ### Example of usage
 
 ```go
-import OTPLessAuthSdk
-
-func main() {
-
-    code := "your_id_token_here"
-    clientID := "your_client_id"
-    clientSecret := "your_client_secret"
-    userDetail := UserDetail{}
-    result, err := userDetail.VerifyCode(code, clientID, clientSecret)
-    if err != nil {
-        fmt.Println("Error:", err)
-        return
-    }
-
-    fmt.Printf("User Detail Struct: %+v\n", result)
-}
-
 
 ```
 

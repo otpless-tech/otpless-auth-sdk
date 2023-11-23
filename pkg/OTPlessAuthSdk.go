@@ -16,7 +16,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func (u UserDetail) DecodeIDToken(idToken, clientID, clientSecret, audience string) (*UserDetailResult, error) {
+func DecodeIDToken(idToken, clientID, clientSecret, audience string) (*UserDetailResult, error) {
 	oidcConfig, err := getConfig()
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (u UserDetail) DecodeIDToken(idToken, clientID, clientSecret, audience stri
 	return &userDetail, nil
 }
 
-func (u UserDetail) VerifyCode(code, clientID, clientSecret string) (*UserDetailResult, error) {
+func VerifyCode(code, clientID, clientSecret string) (*UserDetailResult, error) {
 	audience := ""
 	oidcConfig, err := getConfig()
 	if err != nil {
@@ -87,7 +87,7 @@ func (u UserDetail) VerifyCode(code, clientID, clientSecret string) (*UserDetail
 
 	return nil, errors.New(fmt.Sprintf("Request failed with status code %d", response.StatusCode))
 }
-func (u UserDetail) VerifyAuthToken(token, clientID, clientSecret string) (*UserDetailResult, error) {
+func VerifyAuthToken(token, clientID, clientSecret string) (*UserDetailResult, error) {
 
 	formData := url.Values{}
 	formData.Set("token", token)

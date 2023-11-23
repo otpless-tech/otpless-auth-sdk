@@ -10,8 +10,6 @@ type UserDetailResult struct {
 	NationalPhoneNumber string `json:"national_phone_number"`
 }
 
-type UserDetail struct{}
-
 type MagicLinkResponse struct {
 	RequestIds []struct {
 		Type  string `json:"type"`
