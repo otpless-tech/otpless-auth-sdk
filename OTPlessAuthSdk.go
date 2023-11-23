@@ -82,7 +82,7 @@ func VerifyCode(code, clientID, clientSecret string) (*UserDetailResult, error) 
 		var respJson map[string]interface{}
 		json.Unmarshal(body, &respJson)
 
-		return u.DecodeIDToken(respJson["id_token"].(string), clientID, clientSecret, audience)
+		return DecodeIDToken(respJson["id_token"].(string), clientID, clientSecret, audience)
 	}
 
 	return nil, errors.New(fmt.Sprintf("Request failed with status code %d", response.StatusCode))
