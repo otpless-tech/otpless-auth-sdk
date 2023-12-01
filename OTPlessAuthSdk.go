@@ -302,7 +302,7 @@ func SendOTP(sendTo, orderID, hash, clientID, clientSecret string) (*SendOTPResp
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("request failed with status code %d", response.StatusCode)
+		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, err)
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
