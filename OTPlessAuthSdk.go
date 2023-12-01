@@ -301,13 +301,13 @@ func SendOTP(sendTo, orderID, hash, clientID, clientSecret string) (*SendOTPResp
 	}
 	defer response.Body.Close()
 
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, err)
-	}
-
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, string(body))
 	}
 
 	var otpResponse SendOTPResponse
@@ -352,13 +352,13 @@ func ResendOTP(orderID, clientID, clientSecret string) (*ResendOTPResponse, erro
 	}
 	defer response.Body.Close()
 
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("request failed with status code %d", response.StatusCode)
-	}
-
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, string(body))
 	}
 
 	var otpResponse ResendOTPResponse
@@ -408,6 +408,10 @@ func VerifyOTP(orderID, otp, sendTo, clientID, clientSecret string) (*VerifyOTPR
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, string(body))
 	}
 
 	var otpResponse VerifyOTPResponse
