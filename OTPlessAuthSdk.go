@@ -1,6 +1,7 @@
 package otplessAuthSdk
 
 import (
+	"bytes"
 	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
@@ -263,4 +264,161 @@ func getPublicKey(url string) (map[string]interface{}, error) {
 	}
 
 	return nil, errors.New("Unable to fetch public key")
+}
+
+func SendOTP(sendTo, orderID, hash, clientID, clientSecret string) (*SendOTPResponse, error) {
+	url := OTP_BASE_URL + "/send"
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	data := SendOTPRequest{
+		SendTo:  sendTo,
+		OrderID: orderID,
+		Hash:    hash,
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, string(body))
+	}
+
+	var otpResponse SendOTPResponse
+	err = json.Unmarshal(body, &otpResponse)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
+	}
+
+	return &otpResponse, nil
+}
+
+func ResendOTP(orderID, clientID, clientSecret string) (*ResendOTPResponse, error) {
+	url := OTP_BASE_URL + "/resend"
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	data := ResendOTPRequest{
+		OrderID: orderID,
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, string(body))
+	}
+
+	var otpResponse ResendOTPResponse
+	err = json.Unmarshal(body, &otpResponse)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
+	}
+
+	return &otpResponse, nil
+}
+
+func VerifyOTP(orderID, otp, sendTo, clientID, clientSecret string) (*VerifyOTPResponse, error) {
+	url := OTP_BASE_URL + "/verify"
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	data := VerifyOTPRequest{
+		OrderID: orderID,
+		OTP:     otp,
+		SendTo:  sendTo,
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d %v", response.StatusCode, string(body))
+	}
+
+	var otpResponse VerifyOTPResponse
+	err = json.Unmarshal(body, &otpResponse)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
+	}
+
+	return &otpResponse, nil
 }

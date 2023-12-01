@@ -16,3 +16,34 @@ type MagicLinkResponse struct {
 		Value string `json:"value"`
 	} `json:"requestIds"`
 }
+
+type SendOTPRequest struct {
+	SendTo  string `json:"sendTo"`
+	OrderID string `json:"orderId"`
+	Hash    string `json:"hash"`
+}
+
+type SendOTPResponse struct {
+	OrderID string `json:"orderId"`
+	RefID   string `json:"refId"`
+}
+
+type ResendOTPRequest struct {
+	OrderID string `json:"orderId"`
+}
+
+type ResendOTPResponse struct {
+	OrderID string `json:"orderId"`
+	RefID   string `json:"refId"`
+}
+
+type VerifyOTPRequest struct {
+	OrderID string `json:"orderId"`
+	OTP     string `json:"otp"`
+	SendTo  string `json:"sendTo"`
+}
+
+type VerifyOTPResponse struct {
+	IsOTPVerified bool   `json:"isOTPVerified"`
+	Reason        string `json:"reason,omitempty"`
+}
