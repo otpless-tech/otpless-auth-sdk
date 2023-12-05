@@ -35,20 +35,22 @@ func DecodeIDToken(idToken, clientID, clientSecret, audience string) (*UserDetai
 	if err != nil {
 		return nil, err
 	}
-	authDetails := make(map[string]interface{})
-	err = json.Unmarshal([]byte(decoded["authentication_details"].(string)), &authDetails)
-	if err != nil {
-		return nil, err
-	}
+
 	authTime, err := strconv.ParseInt(decoded["auth_time"].(string), 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing auth_time: %v", err)
 	}
 	var userDetail UserDetailResult
+	userDetail.Email = ""
+	userDetail.PhoneNumber = ""
 	userDetail.Success = true
 	userDetail.AuthTime = authTime
-	userDetail.PhoneNumber = decoded["phone_number"].(string)
-	userDetail.Email = decoded["email"].(string)
+	if phone_number, ok := decoded["phone_number"].(string); ok {
+		userDetail.PhoneNumber = phone_number
+	}
+	if email, ok := decoded["email"].(string); ok {
+		userDetail.Email = email
+	}
 	userDetail.Name = decoded["name"].(string)
 	userDetail.CountryCode = decoded["country_code"].(string)
 	userDetail.NationalPhoneNumber = decoded["national_phone_number"].(string)
