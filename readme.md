@@ -189,6 +189,7 @@ SendOTP(sendTo, orderID, hash string, otpLength int, channel, clientID, clientSe
 | clientId     | String    | true      |                     | Your OTPLess `Client Id`                                       |
 | clientSecret | String    | true      |                     | Your OTPLess `Client Secret`                                   |
 | otpLength    | Integer   | false     | 4 or 6 only allowed | Allowes you to send OTP in 4/6 digit. default will be 6 digit. |
+ channel      | String       | false     | SMS/WHATSAPP/ALL    | Allowes you to send OTP on WhatsApp/SMS/Both. default will be SMS
 
 #### Return
 
