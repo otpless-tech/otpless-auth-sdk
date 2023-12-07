@@ -161,6 +161,86 @@ Object Name: RquestIds
 `success` (boolean): This will be `false`. The method is failed to perform.<br>
 `errorMessage` (String): The message contains error information.<br>
 
+> ## C. OTP class
+
+These methods enable you to send, resend and verify OTP.
+
+### Methods:
+
+---
+
+> ### 1. Send OTP
+
+---
+
+##### Method Signature:
+
+```go
+SendOTP(sendTo, orderID, hash string, otpLength int, channel, clientID, clientSecret string) (*SendOTPResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type | Mandatory | Constraints         | Remarks                                                        |
+| ------------ | --------- | --------- | ------------------- | -------------------------------------------------------------- |
+| sendTO       | String    | true      |                     | An phone number on which you want to send a OTP.               |
+| orderId      | String    | true      |                     | An Merchant unique id for the request.                         |
+| hash         | String    | false     |                     | An Hash will be used to auto read OTP.                         |
+| clientId     | String    | true      |                     | Your OTPLess `Client Id`                                       |
+| clientSecret | String    | true      |                     | Your OTPLess `Client Secret`                                   |
+| otpLength    | Integer   | false     | 4 or 6 only allowed | Allowes you to send OTP in 4/6 digit. default will be 6 digit. |
+
+#### Return
+
+Return:
+Object Name: SendOTPResponse
+
+### 2. Resend OTP
+
+##### Method Signature:
+
+```go
+    ResendOTP(orderID, clientID, clientSecret string) (*ResendOTPResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type | Mandatory | Constraints | Remarks                                |
+| ------------ | --------- | --------- | ----------- | -------------------------------------- |
+| orderId      | String    | true      |             | An Merchant unique id for the request. |
+| clientId     | String    | true      |             | Your OTPLess `Client Id`               |
+| clientSecret | String    | true      |             | Your OTPLess `Client Secret`           |
+
+#### Return
+
+Return:
+Object Name: ResendOTPResponse
+
+---
+
+### 3. Verify OTP
+
+##### Method Signature:
+
+```go
+    VerifyOTP(orderID, otp, sendTo, clientID, clientSecret string) (*VerifyOTPResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type | Mandatory | Constraints | Remarks                                     |
+| ------------ | --------- | --------- | ----------- | ------------------------------------------- |
+| sendTo       | String    | true      |             | An phone number on which OTP has been sent. |
+| orderId      | String    | true      |             | An Merchant unique id for the request.      |
+| otp          | String    | true      |             | OTP value.                                  |
+| clientId     | String    | true      |             | Your OTPLess `Client Id`                    |
+| clientSecret | String    | true      |             | Your OTPLess `Client Secret`                |
+
+#### Return
+
+Return:
+Object Name: VerifyOTPResponse
+
 ### Example of usage
 
 ```go

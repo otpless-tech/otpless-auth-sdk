@@ -18,9 +18,11 @@ type MagicLinkResponse struct {
 }
 
 type SendOTPRequest struct {
-	SendTo  string `json:"sendTo"`
-	OrderID string `json:"orderId"`
-	Hash    string `json:"hash"`
+	SendTo    string `json:"sendTo"`
+	OrderID   string `json:"orderId"`
+	Hash      string `json:"hash"`
+	OtpLength int    `json:"otpLength"`
+	Channel   string `json:"channel"`
 }
 
 type SendOTPResponse struct {
