@@ -183,7 +183,7 @@ SendOTP(sendTo, orderID, hash string, otpLength int, channel, clientID, clientSe
 
 | Params       | Data type | Mandatory | Constraints         | Remarks                                                        |
 | ------------ | --------- | --------- | ------------------- | -------------------------------------------------------------- |
-| sendTO       | String    | true      |                     | An phone number on which you want to send a OTP.               |
+| sendTO       | String    | true      |                     | phone number / email on which you want to send a OTP.               |
 | orderId      | String    | true      |                     | An Merchant unique id for the request.                         |
 | hash         | String    | false     |                     | An Hash will be used to auto read OTP.                         |
 | clientId     | String    | true      |                     | Your OTPLess `Client Id`                                       |
