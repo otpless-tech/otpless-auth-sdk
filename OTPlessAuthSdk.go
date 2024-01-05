@@ -268,8 +268,8 @@ func getPublicKey(url string) (map[string]interface{}, error) {
 	return nil, errors.New("Unable to fetch public key")
 }
 
-func SendOTP(sendTo, orderID, hash string, otpLength int, channel, clientID, clientSecret string) (*SendOTPResponse, error) {
-	url := OTP_BASE_URL + "/send"
+func SendOTP(phoneNumber, email, channel, hash, orderId string, expiry, otpLength int, clientID, clientSecret string) (*SendOTPResponse, error) {
+	url := OTP_BASE_URL + "/v1/send"
 	headers := map[string]string{
 		"clientId":     clientID,
 		"clientSecret": clientSecret,
@@ -277,11 +277,13 @@ func SendOTP(sendTo, orderID, hash string, otpLength int, channel, clientID, cli
 	}
 
 	data := SendOTPRequest{
-		SendTo:    sendTo,
-		OrderID:   orderID,
-		Hash:      hash,
-		OtpLength: otpLength,
-		Channel:   channel,
+		PhoneNumber: phoneNumber,
+		Email:       email,
+		Channel:     channel,
+		Hash:        hash,
+		OrderId:     orderId,
+		Expiry:      expiry,
+		OtpLength:   otpLength,
 	}
 
 	jsonData, err := json.Marshal(data)
@@ -324,7 +326,7 @@ func SendOTP(sendTo, orderID, hash string, otpLength int, channel, clientID, cli
 }
 
 func ResendOTP(orderID, clientID, clientSecret string) (*ResendOTPResponse, error) {
-	url := OTP_BASE_URL + "/resend"
+	url := OTP_BASE_URL + "/v1/resend"
 	headers := map[string]string{
 		"clientId":     clientID,
 		"clientSecret": clientSecret,
@@ -374,8 +376,8 @@ func ResendOTP(orderID, clientID, clientSecret string) (*ResendOTPResponse, erro
 	return &otpResponse, nil
 }
 
-func VerifyOTP(orderID, otp, sendTo, clientID, clientSecret string) (*VerifyOTPResponse, error) {
-	url := OTP_BASE_URL + "/verify"
+func VerifyOTP(orderID, otp, email, phoneNumber, clientID, clientSecret string) (*VerifyOTPResponse, error) {
+	url := OTP_BASE_URL + "/v1/verify"
 	headers := map[string]string{
 		"clientId":     clientID,
 		"clientSecret": clientSecret,
@@ -383,9 +385,10 @@ func VerifyOTP(orderID, otp, sendTo, clientID, clientSecret string) (*VerifyOTPR
 	}
 
 	data := VerifyOTPRequest{
-		OrderID: orderID,
-		OTP:     otp,
-		SendTo:  sendTo,
+		OrderID:     orderID,
+		OTP:         otp,
+		Email:       email,
+		PhoneNumber: phoneNumber,
 	}
 
 	jsonData, err := json.Marshal(data)

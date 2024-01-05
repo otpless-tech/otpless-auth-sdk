@@ -18,16 +18,17 @@ type MagicLinkResponse struct {
 }
 
 type SendOTPRequest struct {
-	SendTo    string `json:"sendTo"`
-	OrderID   string `json:"orderId"`
-	Hash      string `json:"hash"`
-	OtpLength int    `json:"otpLength"`
-	Channel   string `json:"channel"`
+	PhoneNumber string `json:"phoneNumber"`
+	Email       string `json:"email"`
+	Channel     string `json:"channel"`
+	Hash        string `json:"hash"`
+	OrderId     string `json:"orderId"`
+	Expiry      int    `json:"expiry"`
+	OtpLength   int    `json:"otpLength"`
 }
 
 type SendOTPResponse struct {
 	OrderID string `json:"orderId"`
-	RefID   string `json:"refId"`
 }
 
 type ResendOTPRequest struct {
@@ -36,13 +37,13 @@ type ResendOTPRequest struct {
 
 type ResendOTPResponse struct {
 	OrderID string `json:"orderId"`
-	RefID   string `json:"refId"`
 }
 
 type VerifyOTPRequest struct {
-	OrderID string `json:"orderId"`
-	OTP     string `json:"otp"`
-	SendTo  string `json:"sendTo"`
+	OrderID     string `json:"orderId"`
+	OTP         string `json:"otp"`
+	Email       string `json:"email"`
+	PhoneNumber string `json:"phoneNumber"`
 }
 
 type VerifyOTPResponse struct {

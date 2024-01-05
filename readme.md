@@ -176,25 +176,33 @@ These methods enable you to send, resend and verify OTP.
 ##### Method Signature:
 
 ```go
-SendOTP(sendTo, orderID, hash string, otpLength int, channel, clientID, clientSecret string) (*SendOTPResponse, error)
+SendOTP(phoneNumber, email, channel, hash, orderId string, expiry, otpLength int, clientID, clientSecret string) (*SendOTPResponse, error)
 ```
 
 #### Method Params:
 
-| Params       | Data type | Mandatory | Constraints         | Remarks                                                        |
-| ------------ | --------- | --------- | ------------------- | -------------------------------------------------------------- |
-| sendTO       | String    | true      |                     | phone number / email on which you want to send a OTP.               |
-| orderId      | String    | true      |                     | An Merchant unique id for the request.                         |
-| hash         | String    | false     |                     | An Hash will be used to auto read OTP.                         |
-| clientId     | String    | true      |                     | Your OTPLess `Client Id`                                       |
-| clientSecret | String    | true      |                     | Your OTPLess `Client Secret`                                   |
-| otpLength    | Integer   | false     | 4 or 6 only allowed | Allowes you to send OTP in 4/6 digit. default will be 6 digit. |
- channel      | String       | false     | SMS/WHATSAPP/ALL    | Allowes you to send OTP on WhatsApp/SMS/Both. default will be SMS
+| Params       | Data type | Mandatory | Constraints                                                     | Remarks                                                           |
+| ------------ | --------- | --------- | --------------------------------------------------------------- | ----------------------------------------------------------------- |
+| phoneNumber  | String    | true      |                                                                 | Mobile Number of your users                                       |
+| email        | String    | true      |                                                                 | Mail Id of your users                                             |
+| orderId      | String    | false     |                                                                 | An Merchant unique id for the request.                            |
+| expiry       | Int       | false     |                                                                 | OTP expiry in sec                                                 |
+| hash         | String    | false     |                                                                 | An Hash will be used to auto read OTP.                            |
+| clientId     | String    | true      |                                                                 | Your OTPLess `Client Id`                                          |
+| clientSecret | String    | true      |                                                                 | Your OTPLess `Client Secret`                                      |
+| otpLength    | Integer   | false     | 4 or 6 only allowed                                             | Allowes you to send OTP in 4/6 digit. default will be 6 digit.    |
+| channel      | String    | false     | SMS/WHATSAPP/ALL (if no channel given SMS is chosen as default) | Allowes you to send OTP on WhatsApp/SMS/Both. default will be SMS |
 
 #### Return
 
 Return:
 Object Name: SendOTPResponse
+
+```json
+{
+  "orderId": "Otp_ED5F709E1C6B41EB8C0595C7968354EB"
+}
+```
 
 ### 2. Resend OTP
 
@@ -217,6 +225,12 @@ Object Name: SendOTPResponse
 Return:
 Object Name: ResendOTPResponse
 
+```json
+{
+  "orderId": "DP0000111"
+}
+```
+
 ---
 
 ### 3. Verify OTP
@@ -224,14 +238,15 @@ Object Name: ResendOTPResponse
 ##### Method Signature:
 
 ```go
-    VerifyOTP(orderID, otp, sendTo, clientID, clientSecret string) (*VerifyOTPResponse, error)
+    VerifyOTP(orderID, otp, email, phoneNumber, clientID, clientSecret string) (*VerifyOTPResponse, error)
 ```
 
 #### Method Params:
 
 | Params       | Data type | Mandatory | Constraints | Remarks                                     |
 | ------------ | --------- | --------- | ----------- | ------------------------------------------- |
-| sendTo       | String    | true      |             | An phone number on which OTP has been sent. |
+| email        | String    | true      |             | An email on which OTP has been sent.        |
+| phoneNumber  | String    | true      |             | An phone number on which OTP has been sent. |
 | orderId      | String    | true      |             | An Merchant unique id for the request.      |
 | otp          | String    | true      |             | OTP value.                                  |
 | clientId     | String    | true      |             | Your OTPLess `Client Id`                    |
@@ -241,6 +256,14 @@ Object Name: ResendOTPResponse
 
 Return:
 Object Name: VerifyOTPResponse
+
+- `reason` (String): The will be errorMessage in case of OTP doesn't verified
+
+```json
+{
+  "isOTPVerified": true
+}
+```
 
 ### Example of usage
 
