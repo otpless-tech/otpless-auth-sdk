@@ -176,7 +176,8 @@ These methods enable you to send, resend and verify OTP.
 ##### Method Signature:
 
 ```go
-SendOTP(phoneNumber, email, channel, hash, orderId string, expiry, otpLength int, clientID, clientSecret string) (*SendOTPResponse, error)
+SendOTP(req SendOTPRequest, clientID, clientSecret string) (*SendOTPResponse, error)
+
 ```
 
 #### Method Params:

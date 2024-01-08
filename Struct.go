@@ -18,13 +18,14 @@ type MagicLinkResponse struct {
 }
 
 type SendOTPRequest struct {
-	PhoneNumber string `json:"phoneNumber"`
-	Email       string `json:"email"`
-	Channel     string `json:"channel"`
-	Hash        string `json:"hash"`
-	OrderId     string `json:"orderId"`
-	Expiry      int    `json:"expiry"`
-	OtpLength   int    `json:"otpLength"`
+	PhoneNumber string `json:"phoneNumber,omitempty"`
+	Email       string `json:"email,omitempty"`
+	Channel     string `json:"channel,omitempty"`
+	Hash        string `json:"hash,omitempty"`
+	OrderId     string `json:"orderId,omitempty"`
+	Expiry      int    `json:"expiry,omitempty"`
+	OtpLength   int    `json:"otpLength,omitempty"`
+	TemplateId  string `json:"templateId,omitempty"`
 }
 
 type SendOTPResponse struct {

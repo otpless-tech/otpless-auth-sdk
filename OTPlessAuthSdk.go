@@ -268,7 +268,7 @@ func getPublicKey(url string) (map[string]interface{}, error) {
 	return nil, errors.New("Unable to fetch public key")
 }
 
-func SendOTP(phoneNumber, email, channel, hash, orderId string, expiry, otpLength int, clientID, clientSecret string) (*SendOTPResponse, error) {
+func SendOTP(req SendOTPRequest, clientID, clientSecret string) (*SendOTPResponse, error) {
 	url := OTP_BASE_URL + "/v1/send"
 	headers := map[string]string{
 		"clientId":     clientID,
@@ -277,13 +277,14 @@ func SendOTP(phoneNumber, email, channel, hash, orderId string, expiry, otpLengt
 	}
 
 	data := SendOTPRequest{
-		PhoneNumber: phoneNumber,
-		Email:       email,
-		Channel:     channel,
-		Hash:        hash,
-		OrderId:     orderId,
-		Expiry:      expiry,
-		OtpLength:   otpLength,
+		PhoneNumber: req.PhoneNumber,
+		Email:       req.Email,
+		Channel:     req.Channel,
+		Hash:        req.Hash,
+		OrderId:     req.OrderId,
+		Expiry:      req.Expiry,
+		OtpLength:   req.OtpLength,
+		TemplateId:  req.TemplateId,
 	}
 
 	jsonData, err := json.Marshal(data)
