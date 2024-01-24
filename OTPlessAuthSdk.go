@@ -115,6 +115,9 @@ func VerifyAuthToken(token, clientID, clientSecret string) (*UserDetailResult, e
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d %v", resp.StatusCode, string(body))
+	}
 	var decoded map[string]interface{}
 	json.Unmarshal(body, &decoded)
 

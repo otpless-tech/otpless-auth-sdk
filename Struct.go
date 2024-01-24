@@ -12,8 +12,9 @@ type UserDetailResult struct {
 
 type MagicLinkResponse struct {
 	RequestIds []struct {
-		Type  string `json:"type"`
-		Value string `json:"value"`
+		Type           string `json:"type"`
+		Value          string `json:"value"`
+		DestinationUri string `json:"destinationUri,omitempty"`
 	} `json:"requestIds"`
 }
 

@@ -153,7 +153,7 @@ Return:
 Object Name: RquestIds
 
 ```json
-&{RequestIds:[{Type:MOBILE Value:c36b678aef104691b15f93910acfee48} {Type:EMAIL Value:39250d56e8da4f4cb86224929bf76a2d}]}
+&{RequestIds:[{Type:MOBILE Value:c36b678aef104691b15f93910acfee48 DestinationUri:https://wa.me/91971***XX**} {Type:EMAIL Value:39250d56e8da4f4cb86224929bf76a2d}]}
 ```
 
 ### Error case:
