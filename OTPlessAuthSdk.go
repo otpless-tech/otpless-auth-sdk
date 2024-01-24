@@ -125,15 +125,30 @@ func VerifyAuthToken(token, clientID, clientSecret string) (*UserDetailResult, e
 	if err != nil {
 		return nil, fmt.Errorf("error parsing auth_time: %v", err)
 	}
-	// Map the response to UserDetailResult
 	userDetail := UserDetailResult{
-		Success:             true,
-		AuthTime:            authTime,
-		PhoneNumber:         decoded["phone_number"].(string),
-		Email:               decoded["email"].(string),
-		Name:                decoded["name"].(string),
-		CountryCode:         decoded["country_code"].(string),
-		NationalPhoneNumber: decoded["national_phone_number"].(string),
+		Success:  true,
+		AuthTime: authTime,
+	}
+	// Check if the "phone_number" field is present before accessing it
+	if phoneNumber, ok := decoded["phone_number"].(string); ok {
+		userDetail.PhoneNumber = phoneNumber
+	}
+
+	// Check if the "email" field is present before accessing it
+	if email, ok := decoded["email"].(string); ok {
+		userDetail.Email = email
+	}
+
+	userDetail.Name = decoded["name"].(string)
+
+	// Check if the "country_code" field is present before accessing it
+	if countryCode, ok := decoded["country_code"].(string); ok {
+		userDetail.CountryCode = countryCode
+	}
+
+	// Check if the "national_phone_number" field is present before accessing it
+	if nationalPhoneNumber, ok := decoded["national_phone_number"].(string); ok {
+		userDetail.NationalPhoneNumber = nationalPhoneNumber
 	}
 	return &userDetail, nil
 }
