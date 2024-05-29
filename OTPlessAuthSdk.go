@@ -641,3 +641,50 @@ func InitiateMagicLinkV2(req InitiateMagicLinkRequestV2, clientID, clientSecret 
 
 	return &magicLinkResponse, nil
 }
+
+// VerifyCodeV2 sends a request to verify a code.
+func VerifyCodeV2(req VerifyCodeRequest, clientID, clientSecret string) (*VerifyCodeResponse, error) {
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("[VerifyCodeV2] error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", AUTH_API_URL+"/v1/verify/code", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("[VerifyCodeV2] error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{Timeout: HTTP_TIMEOUT}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("[VerifyCodeV2] error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("[VerifyCodeV2] error reading response body: %v", err)
+	}
+
+	var verifyCodeResponse VerifyCodeResponse
+	err = json.Unmarshal(body, &verifyCodeResponse)
+	if err != nil {
+		return nil, fmt.Errorf("[VerifyCodeV2] error unmarshalling response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return &verifyCodeResponse, fmt.Errorf("[VerifyCodeV2] request failed with status code %d: %v", response.StatusCode, string(body))
+	}
+
+	return &verifyCodeResponse, nil
+}
