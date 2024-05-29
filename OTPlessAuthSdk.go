@@ -594,3 +594,50 @@ func InitiateOTPLink(req InitiateOTPLinkRequest, clientID, clientSecret string) 
 
 	return &otpLinkResponse, nil
 }
+
+// InitiateMagicLinkV2 sends a request to initiate a magic link.
+func InitiateMagicLinkV2(req InitiateMagicLinkRequestV2, clientID, clientSecret string) (*InitiateMagicLinkResponseV2, error) {
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateMagicLinkV2] error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", AUTH_API_URL+"/v1/initiate/magiclink", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateMagicLinkV2] error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{Timeout: HTTP_TIMEOUT}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateMagicLinkV2] error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateMagicLinkV2] error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("[InitiateMagicLinkV2] request failed with status code %d: %v", response.StatusCode, string(body))
+	}
+
+	var magicLinkResponse InitiateMagicLinkResponseV2
+	err = json.Unmarshal(body, &magicLinkResponse)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateMagicLinkV2] error unmarshalling response body: %v", err)
+	}
+
+	return &magicLinkResponse, nil
+}

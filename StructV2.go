@@ -39,3 +39,17 @@ type InitiateOTPLinkResponse struct {
 	RequestId string `json:"requestId,omitempty"`
 	Message   string `json:"message,omitempty"`
 }
+
+type InitiateMagicLinkRequestV2 struct {
+	PhoneNumber string                 `json:"phoneNumber,omitempty"`
+	Email       string                 `json:"email,omitempty"`
+	Channels    []string               `json:"channels"`
+	RedirectURI string                 `json:"redirectURI"`
+	Expiry      int                    `json:"expiry"`
+	Metadata    map[string]interface{} `json:"metadata"`
+}
+
+type InitiateMagicLinkResponseV2 struct {
+	RequestId bool   `json:"requestId,omitempty"`
+	Message   string `json:"message,omitempty"`
+}
