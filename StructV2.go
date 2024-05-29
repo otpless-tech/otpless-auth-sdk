@@ -110,3 +110,15 @@ type LocationCode struct {
 type DeviceInfo struct {
 	UserAgent string `json:"userAgent,omitempty"`
 }
+type InitiateOAuthRequest struct {
+	Channel     string                 `json:"channel"`
+	Channels    []string               `json:"channels"`
+	RedirectURI string                 `json:"redirectURI"`
+	Expiry      int                    `json:"expiry"`
+	Metadata    map[string]interface{} `json:"metadata"`
+}
+
+type InitiateOAuthResponse struct {
+	RequestId string `json:"requestId,omitempty"`
+	Link      string `json:"link,omitempty"`
+}

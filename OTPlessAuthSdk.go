@@ -688,3 +688,50 @@ func VerifyCodeV2(req VerifyCodeRequest, clientID, clientSecret string) (*Verify
 
 	return &verifyCodeResponse, nil
 }
+
+// InitiateOAuth sends a request to initiate OAuth.
+func InitiateOAuth(req InitiateOAuthRequest, clientID, clientSecret string) (*InitiateOAuthResponse, error) {
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOAuth] error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", AUTH_API_URL+"/v1/initiate/oauth", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOAuth] error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{Timeout: HTTP_TIMEOUT}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOAuth] error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOAuth] error reading response body: %v", err)
+	}
+
+	var initiateOAuthResponse InitiateOAuthResponse
+	err = json.Unmarshal(body, &initiateOAuthResponse)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOAuth] error unmarshalling response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return &initiateOAuthResponse, fmt.Errorf("[InitiateOAuth] request failed with status code %d: %v", response.StatusCode, string(body))
+	}
+
+	return &initiateOAuthResponse, nil
+}
