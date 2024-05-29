@@ -122,3 +122,13 @@ type InitiateOAuthResponse struct {
 	RequestId string `json:"requestId,omitempty"`
 	Link      string `json:"link,omitempty"`
 }
+
+type CheckStatusRequest struct {
+	RequestId string `json:"requestId"`
+}
+
+type CheckStatusResponse struct {
+	Message     string `json:"message,omitempty"`
+	Description string `json:"description,omitempty"`
+	Status      string `json:"status,omitempty"`
+}

@@ -735,3 +735,50 @@ func InitiateOAuth(req InitiateOAuthRequest, clientID, clientSecret string) (*In
 
 	return &initiateOAuthResponse, nil
 }
+
+// CheckStatus checks the status of a request.
+func CheckStatus(req CheckStatusRequest, clientID, clientSecret string) (*CheckStatusResponse, error) {
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("[CheckStatus] error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", AUTH_API_URL+"/v1/status", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("[CheckStatus] error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{Timeout: HTTP_TIMEOUT}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("[CheckStatus] error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("[CheckStatus] error reading response body: %v", err)
+	}
+
+	var checkStatusResponse CheckStatusResponse
+	err = json.Unmarshal(body, &checkStatusResponse)
+	if err != nil {
+		return nil, fmt.Errorf("[CheckStatus] error unmarshalling response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return &checkStatusResponse, fmt.Errorf("[CheckStatus] request failed with status code %d: %v", response.StatusCode, string(body))
+	}
+
+	return &checkStatusResponse, nil
+}
