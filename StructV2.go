@@ -11,8 +11,8 @@ type SendOTPRequestV2 struct {
 }
 
 type SendOTPResponseV2 struct {
-	Success bool   `json:"success,omitempty"`
-	Message string `json:"message,omitempty"`
+	RequestId string `json:"requestId,omitempty"`
+	Message   string `json:"message,omitempty"`
 }
 
 type VerifyOTPRequestV2 struct {
@@ -21,6 +21,21 @@ type VerifyOTPRequestV2 struct {
 }
 
 type VerifyOTPResponseV2 struct {
-	Success bool   `json:"success,omitempty"`
-	Message string `json:"message,omitempty"`
+	RequestId     string `json:"requestId,omitempty"`
+	IsOTPVerified bool   `json:"isOTPVerified,omitempty"`
+	Message       string `json:"message,omitempty"`
+}
+
+type InitiateOTPLinkRequest struct {
+	PhoneNumber string                 `json:"phoneNumber,omitempty"`
+	Email       string                 `json:"email,omitempty"`
+	RedirectURI string                 `json:"redirectURI"`
+	Channels    []string               `json:"channels"`
+	Expiry      int                    `json:"expiry,omitempty"`
+	Metadata    map[string]interface{} `json:"metadata,omitempty"`
+}
+
+type InitiateOTPLinkResponse struct {
+	RequestId string `json:"requestId,omitempty"`
+	Message   string `json:"message,omitempty"`
 }

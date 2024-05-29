@@ -547,3 +547,50 @@ func VerifyOTPV2(req VerifyOTPRequestV2, clientID, clientSecret string) (*Verify
 
 	return &otpResponse, nil
 }
+
+// InitiateOTPLink sends a request to initiate an OTP link.
+func InitiateOTPLink(req InitiateOTPLinkRequest, clientID, clientSecret string) (*InitiateOTPLinkResponse, error) {
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOTPLink] error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", AUTH_API_URL+"/v1/initiate/otplink", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOTPLink] error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{Timeout: HTTP_TIMEOUT}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOTPLink] error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOTPLink] error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("[InitiateOTPLink] request failed with status code %d: %v", response.StatusCode, string(body))
+	}
+
+	var otpLinkResponse InitiateOTPLinkResponse
+	err = json.Unmarshal(body, &otpLinkResponse)
+	if err != nil {
+		return nil, fmt.Errorf("[InitiateOTPLink] error unmarshalling response body: %v", err)
+	}
+
+	return &otpLinkResponse, nil
+}
