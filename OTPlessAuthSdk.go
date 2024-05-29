@@ -453,3 +453,48 @@ func VerifyOTP(orderID, otp, email, phoneNumber, clientID, clientSecret string) 
 
 	return &otpResponse, nil
 }
+func SendOTPV2(req SendOTPRequestV2, clientID, clientSecret string) (*SendOTPResponseV2, error) {
+	headers := map[string]string{
+		"clientId":     clientID,
+		"clientSecret": clientSecret,
+		"Content-Type": "application/json",
+	}
+
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling data: %v", err)
+	}
+
+	request, err := http.NewRequest("POST", AUTH_API_URL+"/v1/initiate/otp", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+
+	for key, value := range headers {
+		request.Header.Set(key, value)
+	}
+
+	client := &http.Client{Timeout: HTTP_TIMEOUT}
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("request failed with status code %d: %v", response.StatusCode, string(body))
+	}
+
+	var otpResponse SendOTPResponseV2
+	err = json.Unmarshal(body, &otpResponse)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
+	}
+
+	return &otpResponse, nil
+}
