@@ -9,7 +9,18 @@ type SendOTPRequestV2 struct {
 	Expiry      int                    `json:"expiry,omitempty"`
 	Metadata    map[string]interface{} `json:"metadata,omitempty"`
 }
+
 type SendOTPResponseV2 struct {
+	Success bool   `json:"success,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
+type VerifyOTPRequestV2 struct {
+	Otp       string `json:"otp"`
+	RequestId string `json:"requestId"`
+}
+
+type VerifyOTPResponseV2 struct {
 	Success bool   `json:"success,omitempty"`
 	Message string `json:"message,omitempty"`
 }
