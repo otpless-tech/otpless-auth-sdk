@@ -265,7 +265,85 @@ Object Name: VerifyOTPResponse
   "isOTPVerified": true
 }
 ```
+> ## C. V2 Apis
+### 1. SendOTP v2
 
+##### Method Signature:
+
+```go
+    SendOTPV2(req SendOTPRequestV2, clientID, clientSecret string) (*SendOTPResponseV2, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channel      | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| hash         | String          | false     |             | Your mobile application Hash      |
+| expiry       | Int             | false     |             | OTP expiry in sec                 |
+| otpLength    | String          | false     |             | Values like 6 or 4                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+Return:
+Object Name: ResendOTPResponse
+
+`200 OK`
+```json
+{
+  "requestId": "82b2891ce5394eeb837cc9d7850fef68"
+}
+```
+`400 Bad Request`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: OTP Length is invalid. 4 and 6 only allowed"
+}
+```
+---
+### 2. VerifyOTP v2
+
+##### Method Signature:
+
+```go
+    VerifyOTPV2(req VerifyOTPRequestV2, clientID, clientSecret string) (*VerifyOTPResponseV2, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| requestId    | String          | true      |             | Unique requestId (from sendOTP)   |
+| otp          | String          | true      |             | OTP                               |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+Return:
+Object Name: ResendOTPResponse
+
+`200 OK`
+```json
+{
+  "requestId": "bb85a5e777004c0fa1d4a5dc6f053cce",
+  "isOTPVerified": true,
+  "message": "OTP verified successfully"
+}
+
+```
+`400 Bad Request`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid token/request Id"
+}
+```
+---
 ### Example of usage
 
 ```go
