@@ -417,6 +417,89 @@ Object Name: VerifyOTPResponse
 }
 ```
 ---
+### 3. VerifyCode v2
+
+##### Method Signature:
+
+```go
+    VerifyCodeV2(req VerifyCodeRequest, clientID, clientSecret string) (*VerifyCodeResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channels     | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | Link expiry in sec                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "7bb4738eXXXXXXXXXX",
+  "message": "Code verified successfully",
+  "userDetails": {
+    "token": "7bXX4738eXXXXXXXXXX",
+    "timestamp": "2024-05-29T14:09:42Z",
+    "identities": [
+      {
+        "identityType": "MOBILE",
+        "identityValue": "9195XXXXXXXX",
+        "channel": "WHATSAPP",
+        "methods": [
+          "WHATSAPP"
+        ],
+        "name": "XXX",
+        "verified": true,
+        "verifiedAt": "2024-05-29T14:09:01Z"
+      }
+    ],
+    "network": {
+      "ip": "35.154.XX.XXX",
+      "timezone": "Asia/Kolkata",
+      "ipLocation": {
+        "city": {
+          "name": "Mumbai"
+        },
+        "subdivisions": {
+          "code": "MH",
+          "name": "Maharashtra"
+        },
+        "country": {
+          "code": "IN",
+          "name": "India"
+        },
+        "continent": {
+          "code": "AS"
+        },
+        "latitude": 11.0748,
+        "longitude": 22.8856,
+        "postalCode": "123456"
+      }
+    },
+    "deviceInfo": {
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
+    }
+  }
+}
+
+
+```
+`4XX`
+```json
+{
+  "message": "Expired",
+  "description": "Request error: Token is expired"
+}
+```
+---
 ### Example of usage
 
 ```go
