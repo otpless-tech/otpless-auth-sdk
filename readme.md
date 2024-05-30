@@ -296,7 +296,7 @@ Object Name: VerifyOTPResponse
   "requestId": "82b2891ce5394eeb837cc9d7850fef68"
 }
 ```
-`400 Bad Request`
+`4XX`
 ```json
 {
   "message": "Invalid Request",
@@ -332,7 +332,7 @@ Object Name: VerifyOTPResponse
 }
 
 ```
-`400 Bad Request`
+`4XX`
 ```json
 {
   "message": "Invalid Request",
@@ -371,7 +371,7 @@ Object Name: VerifyOTPResponse
 }
 
 ```
-`400 Bad Request`
+`4XX`
 ```json
 {
   "message": "Invalid Request",
@@ -379,7 +379,7 @@ Object Name: VerifyOTPResponse
 }
 ```
 ---
-### 3. InitiateMagicLink v2
+### 4. InitiateMagicLink v2
 
 ##### Method Signature:
 
@@ -409,7 +409,7 @@ Object Name: VerifyOTPResponse
 }
 
 ```
-`400 Bad Request`
+`4XX`
 ```json
 {
   "message": "Invalid Request",
@@ -417,7 +417,7 @@ Object Name: VerifyOTPResponse
 }
 ```
 ---
-### 3. VerifyCode v2
+### 5. VerifyCode v2
 
 ##### Method Signature:
 
@@ -497,6 +497,122 @@ Object Name: VerifyOTPResponse
 {
   "message": "Expired",
   "description": "Request error: Token is expired"
+}
+```
+---
+### 6. InitiateOAuth
+
+##### Method Signature:
+
+```go
+    InitiateOAuth(req InitiateOAuthRequest, clientID, clientSecret string) (*InitiateOAuthResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| channels     | List<String>    | true      |             | ["WHATSAPP"]                      |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | Link expiry in sec                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |#### Return
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "7bb4738e978XXXXXXX",
+  "link": "whatsapp://send?phone=919XXXXXX&text=%E2%80%8E%E2%80%8C%E2%80%8E%E2%80%8E%E2%80%8E%E2%80%8C%E2%80%8D%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8D%E2%80%8C%E2%80%8E%E2%80%8B%E2%80%8B%E2%80%8ESend%20message%20to%20sign%20in"
+}
+
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid redirect URI"
+}
+```
+---
+### 7. CheckStatus
+
+##### Method Signature:
+
+```go
+    CheckStatus(req CheckStatusRequest, clientID, clientSecret string) (*CheckStatusResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| requestId    | String          | true      |             | Got from Initiate OAUTH V2 API    |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+`200 OK`
+```json
+{
+  "status": "INIT",
+  "message": "Authentication not completed, please try again later."
+}
+
+```
+```json
+{
+  "token": "5b59fd875e6848d6bd1c97aefe83d8b5",
+  "timestamp": "2024-05-30T08:12:18Z",
+  "identities": [
+    {
+      "identityType": "MOBILE",
+      "identityValue": "9195XXXX3993",
+      "channel": "WHATSAPP",
+      "methods": [
+        "WHATSAPP"
+      ],
+      "name": "viKi!",
+      "verified": true,
+      "verifiedAt": "2024-05-30T08:11:24Z"
+    }
+  ],
+  "network": {
+    "ip": "13.235.XX.XXX",
+    "timezone": "Asia/Kolkata",
+    "ipLocation": {
+      "city": {
+        "name": "Mumbai"
+      },
+      "subdivisions": {
+        "code": "MH",
+        "name": "Maharashtra"
+      },
+      "country": {
+        "code": "IN",
+        "name": "India"
+      },
+      "continent": {
+        "code": "AS"
+      },
+      "latitude": 11.0748,
+      "longitude": 22.8856,
+      "postalCode": "123456"
+    }
+  },
+  "deviceInfo": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
+  }
+}
+
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid token/request Id"
 }
 ```
 ---
