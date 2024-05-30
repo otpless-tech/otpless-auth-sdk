@@ -379,6 +379,44 @@ Object Name: VerifyOTPResponse
 }
 ```
 ---
+### 3. InitiateMagicLink v2
+
+##### Method Signature:
+
+```go
+    InitiateMagicLinkV2(req InitiateMagicLinkRequestV2, clientID, clientSecret string) (*InitiateMagicLinkResponseV2, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channels     | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | Link expiry in sec                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "c4db2da14be94f44b2de64753ab8c30b"
+}
+
+```
+`400 Bad Request`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid redirect URI"
+}
+```
+---
 ### Example of usage
 
 ```go
