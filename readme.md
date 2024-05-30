@@ -265,7 +265,357 @@ Object Name: VerifyOTPResponse
   "isOTPVerified": true
 }
 ```
+> ## C. V2 Apis
+### 1. SendOTP v2
 
+##### Method Signature:
+
+```go
+    SendOTPV2(req SendOTPRequestV2, clientID, clientSecret string) (*SendOTPResponseV2, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channel      | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| hash         | String          | false     |             | Your mobile application Hash      |
+| expiry       | Int             | false     |             | OTP expiry in sec                 |
+| otpLength    | String          | false     |             | Values like 6 or 4                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "82b2891ce5394eeb837cc9d7850fef68"
+}
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: OTP Length is invalid. 4 and 6 only allowed"
+}
+```
+---
+### 2. VerifyOTP v2
+
+##### Method Signature:
+
+```go
+    VerifyOTPV2(req VerifyOTPRequestV2, clientID, clientSecret string) (*VerifyOTPResponseV2, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| requestId    | String          | true      |             | Unique requestId (from sendOTP)   |
+| otp          | String          | true      |             | OTP                               |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "bb85a5e777004c0fa1d4a5dc6f053cce",
+  "isOTPVerified": true,
+  "message": "OTP verified successfully"
+}
+
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid token/request Id"
+}
+```
+---
+### 3. InitiateOTPLink 
+
+##### Method Signature:
+
+```go
+    InitiateOTPLink(req InitiateOTPLinkRequest, clientID, clientSecret string) (*InitiateOTPLinkResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channels     | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | OTP and Link expiry in sec        |
+| otpLength    | String          | false     |             | Values like 6 or 4                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "df0228c84de845d2ab1f377d0f407c68"
+}
+
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid phone number's channel"
+}
+```
+---
+### 4. InitiateMagicLink v2
+
+##### Method Signature:
+
+```go
+    InitiateMagicLinkV2(req InitiateMagicLinkRequestV2, clientID, clientSecret string) (*InitiateMagicLinkResponseV2, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channels     | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | Link expiry in sec                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "c4db2da14be94f44b2de64753ab8c30b"
+}
+
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid redirect URI"
+}
+```
+---
+### 5. VerifyCode v2
+
+##### Method Signature:
+
+```go
+    VerifyCodeV2(req VerifyCodeRequest, clientID, clientSecret string) (*VerifyCodeResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channels     | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | Link expiry in sec                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "7bb4738eXXXXXXXXXX",
+  "message": "Code verified successfully",
+  "userDetails": {
+    "token": "7bXX4738eXXXXXXXXXX",
+    "timestamp": "2024-05-29T14:09:42Z",
+    "identities": [
+      {
+        "identityType": "MOBILE",
+        "identityValue": "9195XXXXXXXX",
+        "channel": "WHATSAPP",
+        "methods": [
+          "WHATSAPP"
+        ],
+        "name": "XXX",
+        "verified": true,
+        "verifiedAt": "2024-05-29T14:09:01Z"
+      }
+    ],
+    "network": {
+      "ip": "35.154.XX.XXX",
+      "timezone": "Asia/Kolkata",
+      "ipLocation": {
+        "city": {
+          "name": "Mumbai"
+        },
+        "subdivisions": {
+          "code": "MH",
+          "name": "Maharashtra"
+        },
+        "country": {
+          "code": "IN",
+          "name": "India"
+        },
+        "continent": {
+          "code": "AS"
+        },
+        "latitude": 11.0748,
+        "longitude": 22.8856,
+        "postalCode": "123456"
+      }
+    },
+    "deviceInfo": {
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
+    }
+  }
+}
+
+
+```
+`4XX`
+```json
+{
+  "message": "Expired",
+  "description": "Request error: Token is expired"
+}
+```
+---
+### 6. InitiateOAuth
+
+##### Method Signature:
+
+```go
+    InitiateOAuth(req InitiateOAuthRequest, clientID, clientSecret string) (*InitiateOAuthResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| channels     | List<String>    | true      |             | ["WHATSAPP"]                      |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | Link expiry in sec                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |#### Return
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "7bb4738e978XXXXXXX",
+  "link": "whatsapp://send?phone=919XXXXXX&text=%E2%80%8E%E2%80%8C%E2%80%8E%E2%80%8E%E2%80%8E%E2%80%8C%E2%80%8D%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8D%E2%80%8C%E2%80%8E%E2%80%8B%E2%80%8B%E2%80%8ESend%20message%20to%20sign%20in"
+}
+
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid redirect URI"
+}
+```
+---
+### 7. CheckStatus
+
+##### Method Signature:
+
+```go
+    CheckStatus(req CheckStatusRequest, clientID, clientSecret string) (*CheckStatusResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| requestId    | String          | true      |             | Got from Initiate OAUTH V2 API    |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+`200 OK`
+```json
+{
+  "status": "INIT",
+  "message": "Authentication not completed, please try again later."
+}
+
+```
+```json
+{
+  "token": "5b59fd875e6848d6bd1c97aefe83d8b5",
+  "timestamp": "2024-05-30T08:12:18Z",
+  "identities": [
+    {
+      "identityType": "MOBILE",
+      "identityValue": "9195XXXX3993",
+      "channel": "WHATSAPP",
+      "methods": [
+        "WHATSAPP"
+      ],
+      "name": "viKi!",
+      "verified": true,
+      "verifiedAt": "2024-05-30T08:11:24Z"
+    }
+  ],
+  "network": {
+    "ip": "13.235.XX.XXX",
+    "timezone": "Asia/Kolkata",
+    "ipLocation": {
+      "city": {
+        "name": "Mumbai"
+      },
+      "subdivisions": {
+        "code": "MH",
+        "name": "Maharashtra"
+      },
+      "country": {
+        "code": "IN",
+        "name": "India"
+      },
+      "continent": {
+        "code": "AS"
+      },
+      "latitude": 11.0748,
+      "longitude": 22.8856,
+      "postalCode": "123456"
+    }
+  },
+  "deviceInfo": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
+  }
+}
+
+```
+`4XX`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid token/request Id"
+}
+```
+---
 ### Example of usage
 
 ```go
