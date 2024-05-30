@@ -1,5 +1,7 @@
 package otplessAuthSdk
 
+import "time"
+
 type SendOTPRequestV2 struct {
 	PhoneNumber string                 `json:"phoneNumber,omitempty"`
 	Email       string                 `json:"email,omitempty"`
@@ -128,7 +130,30 @@ type CheckStatusRequest struct {
 }
 
 type CheckStatusResponse struct {
-	Message     string `json:"message,omitempty"`
-	Description string `json:"description,omitempty"`
-	Status      string `json:"status,omitempty"`
+	Token       string     `json:"token,omitempty"`
+	Status      string     `json:"status,omitempty"`
+	Timestamp   time.Time  `json:"timestamp,omitempty"`
+	Message     string     `json:"message,omitempty"`
+	Description string     `json:"description,omitempty"`
+	Identities  []Identity `json:"identities,omitempty"`
+	Network     Network    `json:"network,omitempty"`
+	DeviceInfo  DeviceInfo `json:"deviceInfo,omitempty"`
+}
+
+type City struct {
+	Name string `json:"name,omitempty"`
+}
+
+type Subdivisions struct {
+	Code string `json:"code,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type Country struct {
+	Code string `json:"code,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type Continent struct {
+	Code string `json:"code,omitempty"`
 }
