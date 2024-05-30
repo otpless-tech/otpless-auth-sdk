@@ -289,8 +289,6 @@ Object Name: VerifyOTPResponse
 | clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
 #### Return
 
-Return:
-Object Name: ResendOTPResponse
 
 `200 OK`
 ```json
@@ -324,8 +322,6 @@ Object Name: ResendOTPResponse
 | clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
 #### Return
 
-Return:
-Object Name: ResendOTPResponse
 
 `200 OK`
 ```json
@@ -341,6 +337,45 @@ Object Name: ResendOTPResponse
 {
   "message": "Invalid Request",
   "description": "Request error: Invalid token/request Id"
+}
+```
+---
+### 3. InitiateOTPLink 
+
+##### Method Signature:
+
+```go
+    InitiateOTPLink(req InitiateOTPLinkRequest, clientID, clientSecret string) (*InitiateOTPLinkResponse, error)
+```
+
+#### Method Params:
+
+| Params       | Data type       | Mandatory | Constraints | Remarks                           |
+| ------------ | ----------------| --------- | ----------- | --------------------------------- |
+| phoneNumber  | String          | true      |             | Mobile Number of your users       |
+| email        | String          | true      |             | Mail Id of your users             |
+| channels     | List<String>    | false     |             | ["WHATSAPP"], ["SMS"]             |
+| redirectURI  | String          | true      |             | redirect Url                      |
+| expiry       | Int             | false     |             | OTP and Link expiry in sec        |
+| otpLength    | String          | false     |             | Values like 6 or 4                |
+| metadata     | Object          | false     |             |                                   |
+| clientId     | String          | true      |             | Your OTPLess `Client Id`          |
+| clientSecret | String          | true      |             | Your OTPLess `Client Secret`      |
+#### Return
+
+
+`200 OK`
+```json
+{
+  "requestId": "df0228c84de845d2ab1f377d0f407c68"
+}
+
+```
+`400 Bad Request`
+```json
+{
+  "message": "Invalid Request",
+  "description": "Request error: Invalid phone number's channel"
 }
 ```
 ---
